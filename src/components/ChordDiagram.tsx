@@ -1,19 +1,22 @@
-import React from 'react';
-import { ChordDiagram as ChordDiagramType } from '../types';
+import React from "react";
+import { ChordDiagram as ChordDiagramType } from "../types";
 
 interface ChordDiagramProps {
   diagram: ChordDiagramType;
   form: string;
 }
 
-export const ChordDiagram: React.FC<ChordDiagramProps> = ({ diagram, form }) => {
+export const ChordDiagram: React.FC<ChordDiagramProps> = ({
+  diagram,
+  form,
+}) => {
   const strings = diagram.strings;
-  const stringNotes = ['E', 'A', 'D', 'G', 'B', 'E']; // Low to high
-  
+  const stringNotes = ["E", "A", "D", "G", "B", "E"]; // Low to high
+
   // Calculate which fret to display as the first fret shown
-  const maxFret = Math.max(...strings.filter(f => f > 0), 4);
+  const maxFret = Math.max(...strings.filter((f) => f > 0), 4);
   const startFret = Math.max(1, Math.floor((maxFret - 3) / 2) * 2);
-  
+
   return (
     <div className="flex flex-col items-center gap-4 my-8">
       <div className="chord-diagram">
@@ -25,10 +28,15 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = ({ diagram, form }) => 
         </div>
 
         {/* Guitar diagram SVG */}
-        <svg width="240" height="280" viewBox="0 0 240 280" className="border border-slate-300 rounded bg-white">
+        <svg
+          width="240"
+          height="280"
+          viewBox="0 0 240 280"
+          className="border border-slate-300 rounded bg-white"
+        >
           {/* Fretboard background */}
           <rect width="240" height="280" fill="#f8f8f8" />
-          
+
           {/* Frets (horizontal lines) */}
           {[0, 55, 110, 165, 220].map((y, i) => (
             <line

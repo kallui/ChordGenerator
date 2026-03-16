@@ -1,6 +1,18 @@
-export type RootNote = 'C' | 'C#' | 'D' | 'D#' | 'E' | 'F' | 'F#' | 'G' | 'G#' | 'A' | 'A#' | 'B';
-export type ChordType = 'Major' | 'Minor' | 'Major7' | 'Minor7' | 'Dominant7';
-export type CAGEDForm = 'C' | 'A' | 'G' | 'E' | 'D';
+export type RootNote =
+  | "C"
+  | "C#"
+  | "D"
+  | "D#"
+  | "E"
+  | "F"
+  | "F#"
+  | "G"
+  | "G#"
+  | "A"
+  | "A#"
+  | "B";
+export type ChordType = "Major" | "Minor" | "Major7" | "Minor7" | "Dominant7";
+export type CAGEDForm = "C" | "A" | "G" | "E" | "D";
 
 export interface ChordDiagram {
   form: CAGEDForm;

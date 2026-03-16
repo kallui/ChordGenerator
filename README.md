@@ -5,6 +5,7 @@ A modern web-based training tool for guitarists to practice chords through rando
 ## 🎵 Features
 
 ### Core Functionality
+
 - **Randomizer Engine**: Generates random chord combinations from three distinct variables:
   - Root Note (C, C#, D, D#, E, F, F#, G, G#, A, A#, B)
   - Chord Type (Major, Minor, Major7, Minor7, Dominant7)
@@ -17,6 +18,7 @@ A modern web-based training tool for guitarists to practice chords through rando
 - **Progress Navigation**: Simple, clean UI controls to navigate between chords and toggle visibility of the cheat sheet
 
 ### Design
+
 - Clean, minimalist, responsive UI using **shadcn/ui** component library
 - Built with **React** and **TypeScript** for type safety
 - Styled with **Tailwind CSS** for modern aesthetics
@@ -62,22 +64,26 @@ ChordGenerator/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - npm or yarn
 
 ### Installation
 
 1. Navigate to the project directory:
+
 ```bash
 cd ChordGenerator
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -95,6 +101,7 @@ The app will automatically open in your browser at `http://localhost:5173`
 ## 🎸 Chord Diagram Guide
 
 The chord diagrams display:
+
 - **Horizontal lines**: Frets on the guitar (1-4 shown)
 - **Vertical lines**: Guitar strings (E-A-D-G-B-E, low to high)
 - **●**: Fretted note – press down at this position
@@ -105,12 +112,14 @@ The chord diagrams display:
 ## 🎯 Features for Guitarists
 
 ### Why This Tool is Effective
+
 - **Randomization**: Keeps practice sessions interesting and prevents muscle memory bias
 - **CAGED System**: Helps learn multiple voicings of the same chord
 - **Theory Integration**: Understand how chords are built across the fingerboard
 - **Visual Learning**: Instant visual feedback on chord positions
 
 ### Recommended Practice Routine
+
 1. Start with major and minor chords
 2. Progress to 7th chords (Major7, Minor7, Dominant7)
 3. Focus on smooth transitions between forms
@@ -136,18 +145,23 @@ The built files will be in the `dist` directory, ready to deploy.
 ## 🎨 Customization
 
 ### Adding More Chords
+
 Edit `src/data/chords.ts` to add more chord types or variations. Each chord needs:
+
 - Root note and chord type
 - CAGED form diagrams with fret positions
 - String descriptions
 
 ### Modifying Styles
+
 - Global styles: `src/index.css`
 - Tailwind config: `tailwind.config.js`
 - Component styles: Tailwind classes in component files
 
 ### Adding New Randomizer Options
+
 Extend `src/types.ts` and `src/lib/randomizer.ts` to add new variables like:
+
 - Tempo ranges
 - Strumming patterns
 - Time signatures
@@ -160,6 +174,7 @@ This project is open source and available for personal and educational use.
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
+
 - Add more chord voicings
 - Improve the chord diagram visualization
 - Add new practice modes
@@ -168,6 +183,7 @@ Contributions are welcome! Feel free to:
 ## 💡 Future Enhancements
 
 Potential features for future versions:
+
 - Audio playback of chord sounds
 - Progress tracking and statistics
 - Difficulty levels
@@ -180,17 +196,22 @@ Potential features for future versions:
 ## 🆘 Troubleshooting
 
 ### Port Already in Use
+
 If port 5173 is already in use, Vite will automatically try the next available port.
 
 ### Dependencies Not Installing
+
 Try clearing npm cache:
+
 ```bash
 npm cache clean --force
 npm install
 ```
 
 ### Build Errors
+
 Make sure you're using a compatible Node version:
+
 ```bash
 node --version  # Should be v16+
 ```

@@ -1,10 +1,17 @@
-import { useState, useEffect } from 'react';
-import { AppState, GeneratedChord } from './types';
-import { generateRandomChord } from './lib/randomizer';
-import { Button } from './components/ui/Button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/ui/Card';
-import { ChordDiagram } from './components/ChordDiagram';
-import { Music } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { AppState, GeneratedChord } from "./types";
+import { generateRandomChord } from "./lib/randomizer";
+import { Button } from "./components/ui/Button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./components/ui/Card";
+import { ChordDiagram } from "./components/ChordDiagram";
+import { Music } from "lucide-react";
 
 function App() {
   const [appState, setAppState] = useState<AppState>({
@@ -26,7 +33,7 @@ function App() {
   };
 
   const handleToggleAnswer = () => {
-    setAppState(prev => ({
+    setAppState((prev) => ({
       ...prev,
       showAnswer: !prev.showAnswer,
     }));
@@ -41,7 +48,9 @@ function App() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Music className="w-8 h-8 text-slate-900" />
-            <h1 className="text-4xl font-bold text-slate-900">ChordGenerator</h1>
+            <h1 className="text-4xl font-bold text-slate-900">
+              ChordGenerator
+            </h1>
           </div>
           <p className="text-slate-600">Guitar Chord Practice Randomizer</p>
         </div>
@@ -50,7 +59,9 @@ function App() {
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle>Practice a Random Chord</CardTitle>
-            <CardDescription>Learn guitar chords with randomized combinations</CardDescription>
+            <CardDescription>
+              Learn guitar chords with randomized combinations
+            </CardDescription>
           </CardHeader>
 
           <CardContent>
@@ -60,7 +71,9 @@ function App() {
                 <div className="text-center space-y-4">
                   <div className="bg-slate-50 rounded-lg p-8 border-2 border-slate-200">
                     <div className="space-y-3">
-                      <p className="text-sm text-slate-600 font-medium">Your Target Chord:</p>
+                      <p className="text-sm text-slate-600 font-medium">
+                        Your Target Chord:
+                      </p>
                       <div className="text-5xl font-bold text-slate-900">
                         {currentChord.rootNote}
                         <span className="text-3xl text-slate-600 ml-1">
@@ -97,7 +110,7 @@ function App() {
                     size="lg"
                     className="font-semibold"
                   >
-                    {appState.showAnswer ? 'Hide' : 'Show'} Answer
+                    {appState.showAnswer ? "Hide" : "Show"} Answer
                   </Button>
                 </div>
               </div>
@@ -129,7 +142,10 @@ function App() {
 
         {/* Footer */}
         <div className="mt-12 text-center text-xs text-slate-500">
-          <p>Master the CAGED system • Improve your muscle memory • Practice with purpose</p>
+          <p>
+            Master the CAGED system • Improve your muscle memory • Practice with
+            purpose
+          </p>
         </div>
       </div>
     </div>
