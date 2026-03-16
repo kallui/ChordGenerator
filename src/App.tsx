@@ -11,7 +11,7 @@ import {
 } from "./components/ui/Card";
 import { ChordDiagram } from "./components/ChordDiagram";
 import { CheatSheet } from "./components/CheatSheet";
-import { Music, BookOpen, Eye, EyeOff, RefreshCw } from "lucide-react";
+import { Music, BookOpen, Eye, EyeOff, RefreshCw, Github } from "lucide-react";
 
 type PageMode = "practice" | "cheatsheet";
 
@@ -70,6 +70,16 @@ function App() {
               <BookOpen className="w-4 h-4" />
               Cheat Sheet
             </Button>
+            <a
+              href="https://github.com/kallui/ChordGenerator"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View source on GitHub"
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 hover:text-slate-900"
+            >
+              <Github className="h-4 w-4" />
+              GitHub
+            </a>
           </div>
         </div>
       </div>
