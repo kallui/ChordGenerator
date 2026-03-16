@@ -66,12 +66,20 @@ export const noteOffsets: Record<string, number> = {
   B: 11,
 };
 
+const formBaseRoot: Record<string, keyof typeof noteOffsets> = {
+  "E-form": "E",
+  "A-form": "A",
+  "D-form": "D",
+  "C-form": "C",
+  "G-form": "G",
+};
+
 // Generator function: transpose a shape template to a specific root note
 export function generateChord(
   rootNote: string,
   chordType: string,
   form: string,
-): number[] {
+): (number | null)[] {
   const template =
     chordShapeTemplates[form as keyof typeof chordShapeTemplates];
   if (!template) throw new Error(`Unknown form: ${form}`);
@@ -79,13 +87,21 @@ export function generateChord(
   const chordTemplate = template[chordType as keyof typeof template];
   if (!chordTemplate) throw new Error(`Unknown chord type: ${chordType}`);
 
-  const offset = noteOffsets[rootNote];
-  if (offset === undefined) throw new Error(`Unknown root note: ${rootNote}`);
+  const targetOffset = noteOffsets[rootNote];
+  if (targetOffset === undefined) {
+    throw new Error(`Unknown root note: ${rootNote}`);
+  }
+
+  const baseRoot = formBaseRoot[form];
+  if (!baseRoot) throw new Error(`Unknown form base root: ${form}`);
+
+  const baseOffset = noteOffsets[baseRoot];
+  const shift = (targetOffset - baseOffset + 12) % 12;
 
   // Transpose: add fret offset to all notes
   // Keep null (muted) unchanged, transpose 0 (open) and all fretted notes
   return chordTemplate.map((fret) => {
     if (fret === null) return fret; // Don't transpose muted strings
-    return fret + offset; // Transpose open (0) and fretted notes (1+)
+    return fret + shift; // Transpose open (0) and fretted notes (1+)
   });
 }

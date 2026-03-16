@@ -1,46 +1,73 @@
 import React from "react";
 import { chordShapeTemplates } from "../lib/chordGenerator";
-import { generateChord } from "../lib/chordGenerator";
 
 interface MiniChordDiagramProps {
   strings: (number | null)[];
 }
 
 const MiniChordDiagram: React.FC<MiniChordDiagramProps> = ({ strings }) => {
-  const stringNotes = ["E", "A", "D", "G", "B", "E"];
+  const fretTop = 18;
+  const fretSpacing = 17;
+  const visibleFrets = 4;
+  const boardLeft = 14;
+  const boardRight = 72;
+  const boardBottom = fretTop + visibleFrets * fretSpacing;
 
   return (
     <svg
-      width="80"
-      height="100"
-      viewBox="0 0 80 100"
+      width="86"
+      height="118"
+      viewBox="0 0 86 118"
       className="border border-slate-200 rounded bg-white"
     >
-      <rect width="80" height="100" fill="#f9f9f9" />
+      <rect width="86" height="118" fill="#f9f9f9" />
 
-      {/* Frets */}
-      {[0, 20, 40, 60].map((y, i) => (
+      {/* Left gutter for fret labels */}
+      <rect
+        x="0"
+        y={fretTop}
+        width="10"
+        height={visibleFrets * fretSpacing}
+        fill="#f1f5f9"
+      />
+
+      {/* Frets (4 visible frets = 5 lines) */}
+      {Array.from({ length: visibleFrets + 1 }, (_, i) => (
         <line
           key={`fret-${i}`}
-          x1="8"
-          y1={y + 10}
-          x2="72"
-          y2={y + 10}
+          x1={boardLeft}
+          y1={fretTop + i * fretSpacing}
+          x2={boardRight}
+          y2={fretTop + i * fretSpacing}
           stroke="#ccc"
           strokeWidth="1"
         />
       ))}
 
+      {/* Fret labels centered in each fret space */}
+      {Array.from({ length: visibleFrets }, (_, i) => (
+        <text
+          key={`fret-label-${i}`}
+          x="8"
+          y={fretTop + i * fretSpacing + fretSpacing / 2 + 3}
+          fontSize="8"
+          textAnchor="end"
+          fill="#64748b"
+        >
+          {i + 1}
+        </text>
+      ))}
+
       {/* Strings */}
       {[0, 1, 2, 3, 4, 5].map((str, i) => {
-        const x = 13 + str * 10;
+        const x = boardLeft + str * ((boardRight - boardLeft) / 5);
         return (
           <line
             key={`string-${i}`}
             x1={x}
-            y1={10}
+            y1={fretTop}
             x2={x}
-            y2={70}
+            y2={boardBottom}
             stroke="#333"
             strokeWidth={str === 0 || str === 5 ? 1.5 : 1}
           />
@@ -49,13 +76,13 @@ const MiniChordDiagram: React.FC<MiniChordDiagramProps> = ({ strings }) => {
 
       {/* Notes */}
       {strings.map((fret, stringIdx) => {
-        const x = 13 + stringIdx * 10;
+        const x = boardLeft + stringIdx * ((boardRight - boardLeft) / 5);
         if (fret === null) {
           return (
             <text
               key={`muted-${stringIdx}`}
               x={x}
-              y={8}
+              y={12}
               fontSize="8"
               textAnchor="middle"
               fill="#333"
@@ -69,7 +96,7 @@ const MiniChordDiagram: React.FC<MiniChordDiagramProps> = ({ strings }) => {
             <circle
               key={`open-${stringIdx}`}
               cx={x}
-              cy={8}
+              cy={12}
               r="2"
               fill="none"
               stroke="#333"
@@ -77,8 +104,7 @@ const MiniChordDiagram: React.FC<MiniChordDiagramProps> = ({ strings }) => {
             />
           );
         } else {
-          const fretSpacing = 20;
-          const y = 10 + (fret - 1) * fretSpacing + fretSpacing / 2;
+          const y = fretTop + (fret - 1) * fretSpacing + fretSpacing / 2;
           return (
             <circle
               key={`fret-${stringIdx}-${fret}`}
@@ -99,29 +125,25 @@ export const CheatSheet: React.FC = () => {
   const chordTypes = ["Major", "Minor", "7", "Min7", "Maj7", "Power5"] as const;
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">
-          Chord Templates
+    <div className="w-full max-w-7xl mx-auto h-[calc(100vh-110px)] overflow-hidden px-3 py-2">
+      <div className="mb-2">
+        <h2 className="text-xl font-bold text-slate-900 leading-tight">
+          CAGED Chord Table
         </h2>
-        <p className="text-slate-600">
-          All 30 chord shape templates in the CAGED system. These templates are
-          transposed algorithmically for any root note.
-        </p>
       </div>
 
       {/* Responsive table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-hidden h-[calc(100%-44px)]">
         <div className="inline-block min-w-full">
           {/* Header */}
-          <div className="grid grid-cols-7 gap-2 mb-4">
-            <div className="font-bold text-slate-900 p-2 bg-slate-100 rounded">
+          <div className="grid grid-cols-7 gap-1 mb-1">
+            <div className="font-bold text-slate-900 px-2 py-1 bg-slate-100 rounded text-sm">
               Form
             </div>
             {chordTypes.map((type) => (
               <div
                 key={type}
-                className="font-bold text-slate-900 p-2 bg-slate-100 rounded text-center"
+                className="font-bold text-slate-900 px-1 py-1 bg-slate-100 rounded text-center text-sm"
               >
                 {type}
               </div>
@@ -130,9 +152,9 @@ export const CheatSheet: React.FC = () => {
 
           {/* Rows */}
           {forms.map((form) => (
-            <div key={form} className="grid grid-cols-7 gap-2 mb-4">
+            <div key={form} className="grid grid-cols-7 gap-1 mb-1">
               {/* Form name */}
-              <div className="font-bold text-slate-900 p-2 bg-slate-50 rounded flex items-center">
+              <div className="font-bold text-slate-900 px-2 py-1 bg-slate-50 rounded flex items-center text-sm">
                 {form}
               </div>
 
@@ -146,7 +168,7 @@ export const CheatSheet: React.FC = () => {
                   return (
                     <div
                       key={`${form}-${chordType}`}
-                      className="p-2 bg-slate-50 rounded flex items-center justify-center text-xs text-slate-400"
+                      className="px-1 py-1 min-h-[122px] bg-slate-50 rounded flex items-center justify-center text-xs text-slate-400"
                     >
                       N/A
                     </div>
@@ -156,7 +178,7 @@ export const CheatSheet: React.FC = () => {
                 return (
                   <div
                     key={`${form}-${chordType}`}
-                    className="p-2 bg-white rounded flex items-center justify-center"
+                    className="px-1 py-1 min-h-[122px] bg-white rounded flex items-center justify-center"
                     title={`${form} ${chordType}`}
                   >
                     <MiniChordDiagram strings={chord} />
@@ -166,38 +188,6 @@ export const CheatSheet: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Legend */}
-      <div className="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200">
-        <h3 className="font-bold text-slate-900 mb-2">Legend</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm text-slate-700">
-          <div>● = Fretted note (press down)</div>
-          <div>○ = Open string (play without fretting)</div>
-          <div>✕ = Muted string (don't play)</div>
-          <div>Blank = Chord not available in this form</div>
-        </div>
-      </div>
-
-      {/* Info box */}
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <h3 className="font-bold text-blue-900 mb-2">How It Works</h3>
-        <ul className="list-disc list-inside text-sm text-blue-900 space-y-1">
-          <li>
-            These 30 templates represent every chord shape across all 5 CAGED
-            forms
-          </li>
-          <li>
-            The app automatically transposes these templates to any root note
-          </li>
-          <li>
-            For example: E-form Major (shown above) becomes G Major by adding 3
-            frets
-          </li>
-          <li>
-            This algorithm eliminates the need for 200+ hardcoded chord diagrams
-          </li>
-        </ul>
       </div>
     </div>
   );

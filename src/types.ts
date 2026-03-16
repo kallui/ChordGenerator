@@ -11,12 +11,21 @@ export type RootNote =
   | "A"
   | "A#"
   | "B";
-export type ChordType = "Major" | "Minor" | "Major7" | "Minor7" | "Dominant7";
+export type ChordType =
+  | "Major"
+  | "Minor"
+  | "7"
+  | "Min7"
+  | "Maj7"
+  | "Power5"
+  | "Major7"
+  | "Minor7"
+  | "Dominant7";
 export type CAGEDForm = "C" | "A" | "G" | "E" | "D";
 
 export interface ChordDiagram {
   form: CAGEDForm;
-  strings: number[]; // 0-3 fret numbers, -1 for open, x for muted
+  strings: (number | null)[]; // null = muted, numbers are fret positions
   fingers: string[]; // Finger positions (T, I, M, R, P)
   description: string;
 }

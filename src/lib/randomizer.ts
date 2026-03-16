@@ -1,5 +1,5 @@
 import { RootNote, ChordType, CAGEDForm, GeneratedChord } from "../types";
-import { generateChord } from "./chordGenerator";
+import { generateChord, chordShapeTemplates } from "./chordGenerator";
 
 const ROOT_NOTES: RootNote[] = [
   "C",
@@ -16,16 +16,6 @@ const ROOT_NOTES: RootNote[] = [
   "B",
 ];
 
-// Note: these may differ based on which forms have which chord types
-// Update as needed when chord templates are finalized
-const CHORD_TYPES: ChordType[] = [
-  "Major",
-  "Minor",
-  "Major7",
-  "Minor7",
-  "Dominant7",
-];
-
 const CAGED_FORMS: CAGEDForm[] = ["C", "A", "G", "E", "D"];
 
 function getRandomElement<T>(array: T[]): T {
@@ -34,34 +24,36 @@ function getRandomElement<T>(array: T[]): T {
 
 /**
  * Generate a random chord using the algorithm-based template system
- * Transposition is handled automatically by the generateChord function
+ * Strategy: Pick form first, then a valid chord type from that form
+ * This guarantees a valid combination without retries or recursion
  */
 export function generateRandomChord(): GeneratedChord {
-  let rootNote: RootNote;
-  let chordType: ChordType;
-  let form: CAGEDForm;
-  let strings: (number | null)[];
+  // Pick random root note
+  const rootNote = getRandomElement(ROOT_NOTES);
 
-  // Keep trying until we find a valid combination
-  // (some form/chord combinations may not exist)
-  let maxAttempts = 50;
-  while (maxAttempts > 0) {
-    rootNote = getRandomElement(ROOT_NOTES);
-    chordType = getRandomElement(CHORD_TYPES);
-    form = getRandomElement(CAGED_FORMS);
+  // Pick random form
+  const form = getRandomElement(CAGED_FORMS);
 
-    try {
-      // Generate the transposed chord
-      strings = generateChord(rootNote, chordType, form);
-      break; // Success, exit loop
-    } catch (error) {
-      maxAttempts--;
-      if (maxAttempts === 0) {
-        // Fallback: try again from scratch
-        return generateRandomChord();
-      }
-    }
+  // Convert form to template key (e.g., "E" -> "E-form")
+  const formKey = `${form}-form` as const;
+
+  // Get all available chord types for this form from the template
+  const formTemplate =
+    chordShapeTemplates[formKey as keyof typeof chordShapeTemplates];
+
+  if (!formTemplate) {
+    throw new Error(`Invalid form: ${formKey}`);
   }
+
+  const availableChordTypes = Object.keys(formTemplate).filter(
+    (key) => formTemplate[key as keyof typeof formTemplate] !== undefined,
+  ) as ChordType[];
+
+  // Pick random chord type from available ones
+  const chordType = getRandomElement(availableChordTypes);
+
+  // Generate the transposed chord
+  const strings = generateChord(rootNote, chordType, formKey);
 
   return {
     rootNote,
@@ -69,7 +61,7 @@ export function generateRandomChord(): GeneratedChord {
     form,
     diagram: {
       form,
-      strings: strings as number[],
+      strings,
       fingers: [], // TODO: generate finger positions from template
       description: `${rootNote} ${chordType} - ${form} form`,
     },

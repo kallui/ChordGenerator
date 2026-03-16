@@ -12,10 +12,15 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = ({
 }) => {
   const strings = diagram.strings;
   const stringNotes = ["E", "A", "D", "G", "B", "E"]; // Low to high
+  const fretTop = 30;
+  const fretSpacing = 55;
 
-  // Calculate which fret to display as the first fret shown
-  const maxFret = Math.max(...strings.filter((f) => f > 0), 4);
-  const startFret = Math.max(1, Math.floor((maxFret - 3) / 2) * 2);
+  // Determine the displayed fret window so transposed shapes stay visible.
+  const frettedNotes = strings.filter(
+    (fret): fret is number => fret !== null && fret > 0,
+  );
+  const minFret = frettedNotes.length ? Math.min(...frettedNotes) : 1;
+  const startFret = minFret <= 1 ? 1 : minFret;
 
   return (
     <div className="flex flex-col items-center gap-4 my-8">
@@ -23,7 +28,7 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = ({
         {/* Fret markers */}
         <div className="mb-4 text-center">
           <p className="text-sm font-semibold text-slate-600">
-            Generated Chord Diagram
+            Generated Chord Diagram ({form}-form)
           </p>
         </div>
 
@@ -36,33 +41,35 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = ({
         >
           {/* Fretboard background */}
           <rect width="240" height="280" fill="#f8f8f8" />
+          {/* Left gutter for fret labels */}
+          <rect x="0" y="30" width="24" height="220" fill="#f1f5f9" />
 
           {/* Frets (horizontal lines) */}
           {[0, 55, 110, 165, 220].map((y, i) => (
             <line
               key={`fret-${i}`}
               x1="20"
-              y1={y + 30}
+              y1={y + fretTop}
               x2="220"
-              y2={y + 30}
+              y2={y + fretTop}
               stroke="#999"
               strokeWidth="2"
             />
           ))}
 
-          {/* Fret numbers */}
-          <text x="10" y="85" fontSize="12" fill="#666">
-            1
-          </text>
-          <text x="10" y="140" fontSize="12" fill="#666">
-            2
-          </text>
-          <text x="10" y="195" fontSize="12" fill="#666">
-            3
-          </text>
-          <text x="10" y="250" fontSize="12" fill="#666">
-            4
-          </text>
+          {/* Fret numbers centered between fret lines, in left gutter */}
+          {[0, 1, 2, 3].map((fretIdx) => (
+            <text
+              key={`fret-label-${fretIdx}`}
+              x="16"
+              y={fretTop + fretIdx * fretSpacing + fretSpacing / 2 + 4}
+              fontSize="12"
+              textAnchor="end"
+              fill="#475569"
+            >
+              {startFret + fretIdx}
+            </text>
+          ))}
 
           {/* Strings (vertical lines) */}
           {[0, 1, 2, 3, 4, 5].map((str, i) => {
@@ -101,20 +108,7 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = ({
           {/* Dots for fretted notes */}
           {strings.map((fret, stringIdx) => {
             const x = 40 + stringIdx * 30;
-            if (fret === -1) {
-              // Open string - O at top
-              return (
-                <circle
-                  key={`note-${stringIdx}`}
-                  cx={x}
-                  cy={20}
-                  r="6"
-                  fill="none"
-                  stroke="#333"
-                  strokeWidth="2"
-                />
-              );
-            } else if (fret === 0) {
+            if (fret === null) {
               // Muted string - X at top
               return (
                 <text
@@ -129,10 +123,23 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = ({
                   ✕
                 </text>
               );
+            } else if (fret === 0) {
+              // Open string - O at top
+              return (
+                <circle
+                  key={`note-${stringIdx}`}
+                  cx={x}
+                  cy={20}
+                  r="6"
+                  fill="none"
+                  stroke="#333"
+                  strokeWidth="2"
+                />
+              );
             } else {
               // Fretted note - dot on fretboard
-              const fretSpacing = 55;
-              const y = 30 + (fret - 1) * fretSpacing + fretSpacing / 2;
+              const y =
+                fretTop + (fret - startFret) * fretSpacing + fretSpacing / 2;
               return (
                 <circle
                   key={`fret-${stringIdx}-${fret}`}

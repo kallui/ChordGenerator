@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AppState, GeneratedChord } from "./types";
+import { AppState } from "./types";
 import { generateRandomChord } from "./lib/randomizer";
 import { Button } from "./components/ui/Button";
 import {
