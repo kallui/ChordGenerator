@@ -11,6 +11,8 @@ Guitar chords are composed of three parts:
 This app will generate a random chord by randomizing these 3 parts, and the user can practice
 figuring out the chord. There's also a "Show Answer" button and also a Cheat Sheet page.
 
+Live App: https://chord-generator-jet.vercel.app
+
 ## App Snippets
 
 ### Random Chord Generator
