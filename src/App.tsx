@@ -12,6 +12,7 @@ import {
 import { ChordDiagram } from "./components/ChordDiagram";
 import { CheatSheet } from "./components/CheatSheet";
 import { Music, BookOpen, Eye, EyeOff, RefreshCw, Github } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 
 type PageMode = "practice" | "cheatsheet";
 
@@ -200,6 +201,8 @@ function App() {
       ) : (
         <CheatSheet />
       )}
+
+      <Analytics />
     </div>
   );
 }
