@@ -8,11 +8,10 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "./components/ui/Card";
 import { ChordDiagram } from "./components/ChordDiagram";
 import { CheatSheet } from "./components/CheatSheet";
-import { Music, BookOpen } from "lucide-react";
+import { Music, BookOpen, Eye, EyeOff, RefreshCw } from "lucide-react";
 
 type PageMode = "practice" | "cheatsheet";
 
@@ -77,104 +76,114 @@ function App() {
 
       {/* Page Content */}
       {pageMode === "practice" ? (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="w-full max-w-2xl">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <p className="text-slate-600">Guitar Chord Practice Randomizer</p>
-            </div>
-
-            {/* Main Card */}
-            <Card className="shadow-lg">
+        <div className="max-w-7xl mx-auto h-[calc(100vh-120px)] overflow-hidden">
+          <div className="h-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Card className="shadow-lg h-full">
               <CardHeader>
-                <CardTitle>Practice a Random Chord</CardTitle>
+                <CardTitle>Practice Mode</CardTitle>
                 <CardDescription>
-                  Learn guitar chords with randomized combinations
+                  Read the target chord and play it before revealing the answer.
                 </CardDescription>
               </CardHeader>
 
-              <CardContent>
+              <CardContent className="h-[calc(100%-110px)] flex items-center">
                 {currentChord ? (
-                  <div className="space-y-6">
-                    {/* Chord Display */}
-                    <div className="text-center space-y-4">
-                      <div className="bg-slate-50 rounded-lg p-8 border-2 border-slate-200">
-                        <div className="space-y-3">
-                          <p className="text-sm text-slate-600 font-medium">
-                            Your Target Chord:
-                          </p>
-                          <div className="text-5xl font-bold text-slate-900">
-                            {currentChord.rootNote}
-                            <span className="text-3xl text-slate-600 ml-1">
-                              {currentChord.chordType}
-                            </span>
-                          </div>
-                          <p className="text-lg text-slate-700 font-semibold">
-                            {currentChord.form}-Form
-                          </p>
-                        </div>
+                  <div className="w-full text-center space-y-5">
+                    <div className="bg-slate-50 rounded-lg p-6 border-2 border-slate-200">
+                      <p className="text-sm text-slate-600 font-medium mb-2">
+                        Your Target Chord
+                      </p>
+                      <div className="text-5xl font-bold text-slate-900 leading-none">
+                        {currentChord.rootNote}
+                        <span className="text-2xl text-slate-600 ml-2 align-middle">
+                          {currentChord.chordType}
+                        </span>
                       </div>
-
-                      <p className="text-sm text-slate-600 italic">
-                        Play this chord combination on your guitar
+                      <p className="text-lg text-slate-700 font-semibold mt-3">
+                        {currentChord.form}-Form
                       </p>
                     </div>
 
-                    {/* Answer Display */}
-                    {appState.showAnswer && currentChord.diagram && (
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg -z-10" />
-                        <ChordDiagram
-                          diagram={currentChord.diagram}
-                          form={currentChord.form}
-                        />
-                      </div>
-                    )}
-
-                    {/* Show Answer Toggle */}
-                    <div className="flex justify-center pt-4">
-                      <Button
-                        onClick={handleToggleAnswer}
-                        variant={appState.showAnswer ? "secondary" : "outline"}
-                        size="lg"
-                        className="font-semibold"
-                      >
-                        {appState.showAnswer ? "Hide" : "Show"} Answer
-                      </Button>
-                    </div>
+                    <p className="text-sm text-slate-600 italic">
+                      Play the chord, then reveal answer when ready.
+                    </p>
                   </div>
                 ) : (
-                  <div className="text-center py-12">
+                  <div className="w-full text-center">
                     <p className="text-slate-600">Loading chord...</p>
                   </div>
                 )}
               </CardContent>
-
-              <CardFooter className="justify-center gap-3 border-t border-slate-200">
-                <Button
-                  onClick={handleNextChord}
-                  size="lg"
-                  className="font-semibold"
-                >
-                  Next Chord
-                </Button>
-              </CardFooter>
             </Card>
 
-            {/* Instructions */}
-            <div className="mt-8 text-center text-sm text-slate-600">
-              <p>1. Look at the chord combination above</p>
-              <p>2. Play it on your guitar in the specified form</p>
-              <p>3. Toggle "Show Answer" to see the diagram</p>
-              <p>4. Click "Next Chord" to practice another</p>
-            </div>
+            <div className="h-full flex flex-col gap-3">
+              <Card className="shadow-lg border-slate-200/80 bg-white/90 backdrop-blur-sm">
+                <CardContent className="pt-4 pb-4">
+                  <div className="grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-1">
+                    <Button
+                      onClick={handleToggleAnswer}
+                      variant={appState.showAnswer ? "default" : "ghost"}
+                      size="default"
+                      className="h-10 font-semibold"
+                    >
+                      {appState.showAnswer ? (
+                        <EyeOff className="w-4 h-4 mr-2" />
+                      ) : (
+                        <Eye className="w-4 h-4 mr-2" />
+                      )}
+                      {appState.showAnswer ? "Hide" : "Show"} Answer
+                    </Button>
+                    <Button
+                      onClick={handleNextChord}
+                      variant="outline"
+                      size="default"
+                      className="h-10 font-semibold bg-white"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Next Chord
+                    </Button>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-500">
+                    Reveal only when ready, then generate a new target.
+                  </p>
+                </CardContent>
+              </Card>
 
-            {/* Footer */}
-            <div className="mt-12 text-center text-xs text-slate-500">
-              <p>
-                Master the CAGED system • Improve your muscle memory • Practice
-                with purpose
-              </p>
+              <Card className="shadow-lg flex-1 min-h-0 border-slate-200/80 bg-white/95">
+                <CardHeader className="pb-2 pt-4">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base">Answer</CardTitle>
+                    <span
+                      className={`rounded-full px-2 py-1 text-[11px] font-medium ${
+                        appState.showAnswer
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-slate-100 text-slate-500"
+                      }`}
+                    >
+                      {appState.showAnswer ? "Visible" : "Hidden"}
+                    </span>
+                  </div>
+                  <CardDescription className="text-xs">
+                    Current chord diagram preview.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="h-[calc(100%-88px)] overflow-hidden pt-0">
+                  {appState.showAnswer && currentChord?.diagram ? (
+                    <div className="h-full flex items-center justify-center rounded-xl border border-blue-100 bg-gradient-to-br from-white to-blue-50">
+                      <ChordDiagram
+                        diagram={currentChord.diagram}
+                        form={currentChord.form}
+                        compact={true}
+                        showLegend={false}
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-full rounded-xl border border-dashed border-slate-300 bg-slate-50/60 flex items-center justify-center px-6 text-center text-sm text-slate-500">
+                      Click "Show Answer" to reveal the chord diagram.
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

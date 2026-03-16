@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Music note icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#cbd5e1"/>
+
+  <circle cx="23" cy="45" r="7" fill="#1e293b"/>
+  <circle cx="43" cy="39" r="7" fill="#1e293b"/>
+  <path d="M30 14v27a2 2 0 0 0 4 0V22.8l12-3V35a2 2 0 1 0 4 0V17.2a2 2 0 0 0-2.5-1.94l-16 4A2 2 0 0 0 30 21z" fill="#1e293b"/>
+</svg>
