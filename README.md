@@ -8,6 +8,8 @@ Guitar chords are composed of three parts:
 - Chord type (Major, Minor, 7, Minor7, Major7, Power5)
 - CAGED form (C Form, A Form, G Form, E Form, D Form)
 
+Example chord: **D Minor7 in E Form**
+
 This app will generate a random chord by randomizing these 3 parts, and the user can practice
 figuring out the chord. There's also a "Show Answer" button and also a Cheat Sheet page.
 
