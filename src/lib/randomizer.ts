@@ -1,5 +1,5 @@
 import { RootNote, ChordType, CAGEDForm, GeneratedChord } from "../types";
-import { chordDatabase } from "../data/chords";
+import { generateChord } from "./chordGenerator";
 
 const ROOT_NOTES: RootNote[] = [
   "C",
@@ -15,6 +15,9 @@ const ROOT_NOTES: RootNote[] = [
   "A#",
   "B",
 ];
+
+// Note: these may differ based on which forms have which chord types
+// Update as needed when chord templates are finalized
 const CHORD_TYPES: ChordType[] = [
   "Major",
   "Minor",
@@ -22,44 +25,53 @@ const CHORD_TYPES: ChordType[] = [
   "Minor7",
   "Dominant7",
 ];
+
 const CAGED_FORMS: CAGEDForm[] = ["C", "A", "G", "E", "D"];
 
 function getRandomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+/**
+ * Generate a random chord using the algorithm-based template system
+ * Transposition is handled automatically by the generateChord function
+ */
 export function generateRandomChord(): GeneratedChord {
-  const rootNote = getRandomElement(ROOT_NOTES);
-  const chordType = getRandomElement(CHORD_TYPES);
-  const form = getRandomElement(CAGED_FORMS);
+  let rootNote: RootNote;
+  let chordType: ChordType;
+  let form: CAGEDForm;
+  let strings: (number | null)[];
 
-  // Find the chord in the database
-  const chordKey = `${rootNote}-${chordType}`;
-  const chordData = chordDatabase[chordKey as keyof typeof chordDatabase];
+  // Keep trying until we find a valid combination
+  // (some form/chord combinations may not exist)
+  let maxAttempts = 50;
+  while (maxAttempts > 0) {
+    rootNote = getRandomElement(ROOT_NOTES);
+    chordType = getRandomElement(CHORD_TYPES);
+    form = getRandomElement(CAGED_FORMS);
 
-  if (!chordData) {
-    // Fallback if chord not found
-    return generateRandomChord();
-  }
-
-  // Find diagram for the selected form
-  const diagram = chordData.diagrams.find((d) => d.form === form);
-
-  if (!diagram) {
-    // If form not available, pick available form
-    const availableDiagram = chordData.diagrams[0];
-    return {
-      rootNote,
-      chordType,
-      form: availableDiagram.form,
-      diagram: availableDiagram,
-    };
+    try {
+      // Generate the transposed chord
+      strings = generateChord(rootNote, chordType, form);
+      break; // Success, exit loop
+    } catch (error) {
+      maxAttempts--;
+      if (maxAttempts === 0) {
+        // Fallback: try again from scratch
+        return generateRandomChord();
+      }
+    }
   }
 
   return {
     rootNote,
     chordType,
     form,
-    diagram,
+    diagram: {
+      form,
+      strings: strings as number[],
+      fingers: [], // TODO: generate finger positions from template
+      description: `${rootNote} ${chordType} - ${form} form`,
+    },
   };
 }

@@ -1,6 +1,5 @@
 // Guitar string order: E (low), A, D, G, B, E (high)
-// -1 = open string (○) - never transposed
-// 0 = muted/don't play (✕) - never transposed
+// 0 = open string in their base root note
 // 1+ = fret numbers - transposed by adding root note offset
 
 //TODO ADD Chord shape altneratives (e.g. E Min7 in E form)
@@ -83,10 +82,10 @@ export function generateChord(
   const offset = noteOffsets[rootNote];
   if (offset === undefined) throw new Error(`Unknown root note: ${rootNote}`);
 
-  // Transpose: add fret offset to fretted notes only
-  // Keep -1 (open) and 0 (muted) unchanged
+  // Transpose: add fret offset to all notes
+  // Keep null (muted) unchanged, transpose 0 (open) and all fretted notes
   return chordTemplate.map((fret) => {
-    if (fret < 1) return fret; // Don't transpose open or muted
-    return fret + offset; // Only transpose fret numbers
+    if (fret === null) return fret; // Don't transpose muted strings
+    return fret + offset; // Transpose open (0) and fretted notes (1+)
   });
 }
