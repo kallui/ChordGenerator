@@ -13,6 +13,18 @@ figuring out the chord. There's also a "Show Answer" button and also a Cheat She
 
 ## App Snippets
 
+### Random Chord Generator
+
+![Main Page](./docs/screenshots/Main-page.png)
+
+### Random Chord Generator with Answer
+
+![Main Page with Answer](./docs/screenshots/Main-page-with-answer.png)
+
+### Cheat Sheet
+
+![Cheat Sheet](./docs/screenshots/Cheat-sheet.png)
+
 ## Run Locally
 
 ```bash
